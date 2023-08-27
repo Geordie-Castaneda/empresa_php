@@ -49,13 +49,12 @@
 
                 <div class="mb-3">
                     <label for="lbl_puesto" class="form-label"><b>Puesto</b></label>
-                    <select class="form-select form-select-lg" name="drop_puesto" id="drop_puesto">
+                    <select class="form-select" name="drop_puesto" id="drop_puesto">
                         <option selected>--- Puesto ---</option>
                         <?php
                             include("datos_conexion.php");
                             $db_conexion = mysqli_connect($db_host, $db_user, $db_pass, $db_nombre);
-                            print_r($db_conexion);
-                            $db_conexion -> real_query("select id_puesto as id, puesto from puestos;");
+                            $db_conexion -> real_query("SELECT id_puesto as id, puesto from puestos;");
                             $resultado = $db_conexion->use_result();
                             while($fila = $resultado->fetch_assoc()){
                                 echo"<option value=". $fila['id'] .">" .$fila['puesto'] ."</option>";
@@ -90,16 +89,29 @@
                 </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    <tr class="table-primary" >
-                        <td scope="row">Item</td>
-                        <td>Item</td>
-                        <td>Item</td>
-                    </tr>
-                    <tr class="table-primary">
-                        <td scope="row">Item</td>
-                        <td>Item</td>
-                        <td>Item</td>
-                    </tr>
+
+                    <?php
+                        include("datos_conexion.php");
+                        $db_conexion = mysqli_connect($db_host, $db_user, $db_pass, $db_nombre);
+                        print_r($db_conexion);
+                        $db_conexion -> real_query("SELECT e.id_empleado as id, e.codigo, e.nombres, e.apellidos, e.direccion, e.telefono,
+                        p.puesto, e.fecha_nacimiento
+                        from empleados as e inner join puestos as p on e.id_puesto = p.id_puesto;");
+                        $resultado = $db_conexion->use_result();
+                        while($fila = $resultado->fetch_assoc()){
+                            echo"<tr data-id=". $fila['id'] .">";
+                            echo"<td>". $fila['codigo'] ."</td>";
+                            echo"<td>". $fila['nombres'] ."</td>";
+                            echo"<td>". $fila['apellidos'] ."</td>";
+                            echo"<td>". $fila['direccion'] ."</td>";
+                            echo"<td>". $fila['telefono'] ."</td>";
+                            echo"<td>". $fila['puesto'] ."</td>";
+                            echo"<td>". $fila['fecha_nacimiento'] ."</td>";
+                            echo"</tr>";
+                        };
+                        $db_conexion -> close();
+                    ?>
+                    
                 </tbody>
                 <tfoot>
                     
