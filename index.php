@@ -51,9 +51,17 @@
                     <label for="lbl_puesto" class="form-label"><b>Puesto</b></label>
                     <select class="form-select form-select-lg" name="drop_puesto" id="drop_puesto">
                         <option selected>--- Puesto ---</option>
-                        <option value=1>Puesto 1</option>
-                        <option value=2>Puesto 2</option>
-                        <option value=3>Puesto 3</option>
+                        <?php
+                            include("datos_conexion.php");
+                            $db_conexion = mysqli_connect($db_host, $db_user, $db_pass, $db_nombre);
+                            print_r($db_conexion);
+                            $db_conexion -> real_query("select id_puesto as id, puesto from puestos;");
+                            $resultado = $db_conexion->use_result();
+                            while($fila = $resultado->fetch_assoc()){
+                                echo"<option value=". $fila['id'] .">" .$fila['puesto'] ."</option>";
+                            };
+                            $db_conexion -> close();
+                        ?>
                     </select>
                 </div>
 
